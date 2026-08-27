@@ -1,0 +1,223 @@
+.booking-page {
+  padding: 40px;
+  min-height: 100vh;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f8fafc,
+      #eef4ff
+    );
+
+  animation: fadePage 0.5s ease;
+}
+
+/* ================= TITLE ================= */
+
+.title {
+  font-family: "Times New Roman", serif;
+
+  font-size: 50px;
+  font-weight: 700;
+
+  text-align: center;
+
+  color: #0f172a;
+
+  margin-bottom: 40px;
+
+  letter-spacing: 0.5px;
+
+  position: relative;
+}
+
+.title::after {
+  content: "";
+
+  width: 90px;
+  height: 4px;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #2563eb,
+      #7c3aed
+    );
+
+  display: block;
+
+  margin: 14px auto 0;
+}
+
+/* ================= GRID ================= */
+
+.card-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(340px, 1fr));
+
+  gap: 32px;
+}
+
+/* ================= CARD ================= */
+
+.booking-card {
+  background: #ffffff;
+
+  border-radius: 24px;
+
+  overflow: hidden;
+
+  cursor: pointer;
+
+  border: 1px solid #e2e8f0;
+
+  box-shadow:
+    0 10px 30px rgba(15,23,42,0.06);
+
+  transition: all 0.35s ease;
+
+  position: relative;
+}
+
+.booking-card:hover {
+  transform: translateY(-8px);
+
+  box-shadow:
+    0 20px 40px rgba(37,99,235,0.12);
+}
+
+/* TOP BORDER */
+
+.booking-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 5px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #2563eb,
+      #7c3aed
+    );
+}
+
+/* ================= IMAGE ================= */
+
+.booking-card img {
+  width: 100%;
+  height: 240px;
+
+  object-fit: cover;
+
+  transition: transform 0.45s ease;
+}
+
+.booking-card:hover img {
+  transform: scale(1.04);
+}
+
+/* ================= CONTENT ================= */
+
+.card-content {
+  padding: 26px;
+}
+
+.card-content h3 {
+  font-size: 28px;
+  font-weight: 700;
+
+  color: #111827;
+
+  margin-bottom: 10px;
+}
+
+.card-content p {
+  font-size: 15px;
+
+  color: #64748b;
+
+  line-height: 1.7;
+
+  margin-bottom: 22px;
+}
+
+/* ================= BUTTON ================= */
+
+.card-content::after {
+  content: "Book Hall";
+
+  display: inline-block;
+
+  padding: 12px 22px;
+
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #4f46e5
+    );
+
+  color: white;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  letter-spacing: 0.3px;
+
+  box-shadow:
+    0 8px 20px rgba(37,99,235,0.18);
+
+  transition: all 0.3s ease;
+}
+
+.booking-card:hover .card-content::after {
+  transform: translateX(6px);
+
+  box-shadow:
+    0 12px 28px rgba(37,99,235,0.24);
+}
+
+/* ================= ANIMATION ================= */
+
+@keyframes fadePage {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+
+  .booking-page {
+    padding: 22px;
+  }
+
+  .title {
+    font-size: 36px;
+  }
+
+  .booking-card img {
+    height: 210px;
+  }
+
+  .card-content h3 {
+    font-size: 24px;
+  }
+}

@@ -1,0 +1,29 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+}
+
+/* RESET ANY LEFT SPACE */
+body, #root {
+  margin: 0;
+  padding: 0;
+}
+
+/* MAIN CONTENT WRAPPER */
+.main-content {
+  width: 100%;
+  max-width: 1200px;
+
+  margin: 0 auto;        /* center */
+  padding: 20px 24px;    /* ✅ LEFT + RIGHT SPACE */
+}
+/* prevent content hiding behind bottom nav */
+body {
+  padding-bottom: 70px;
+}

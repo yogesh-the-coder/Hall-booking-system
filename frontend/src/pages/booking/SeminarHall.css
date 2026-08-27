@@ -1,0 +1,440 @@
+/* ---------- PAGE LAYOUT ---------- */
+
+body {
+  background: #f4f7fb;
+}
+
+/* ---------- CONTAINER ---------- */
+
+.booking-container {
+  max-width: 900px;
+
+  width: 100%;
+
+  margin: 50px auto;
+
+  padding: 40px;
+
+  background: #ffffff;
+
+  border-radius: 18px;
+
+  min-height: auto;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.08);
+
+  border: 1px solid #e5e7eb;
+}
+
+.page-wrapper {
+  min-height: 100vh;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  padding: 40px 20px;
+}
+
+/* ---------- TITLE ---------- */
+
+.booking-title {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+/* ---------- FORM GRID ---------- */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+/* ---------- INPUTS ---------- */
+
+.booking-container input,
+.booking-container select,
+.booking-container textarea {
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.booking-container input:focus,
+.booking-container select:focus,
+.booking-container textarea:focus {
+  border-color: #4f7cff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(79,124,255,0.3);
+}
+
+/* ---------- ERROR ---------- */
+
+.error-text {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* ---------- BUTTON ---------- */
+
+.primary-btn {
+  width: 100%;
+
+  display: block;
+
+  background: #4f7cff;
+
+  color: white;
+
+  border: none;
+
+  padding: 14px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  font-weight: 600;
+
+  font-size: 15px;
+
+  transition: all 0.3s ease;
+
+  margin-top: 20px;
+}
+
+.primary-btn:hover {
+  background: #345be0;
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 18px rgba(79,124,255,0.25);
+}
+
+/* ---------- SLOT BUTTONS ---------- */
+
+.slot-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.slot-btn {
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: none;
+  background: #e8f0ff;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.slot-btn:hover {
+  background: #d4e2ff;
+}
+
+.slot-selected {
+  background: #4f7cff;
+  color: white;
+}
+
+.slot-booked {
+  background: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ---------- CHARACTER COUNT ---------- */
+
+.char-count {
+  font-size: 12px;
+  color: #666;
+  text-align: right;
+}
+
+/* ---------- SECTION HEADINGS ---------- */
+
+.section-title {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #333;
+}
+/* ---------- BANNER ---------- */
+
+.booking-banner {
+  width: 100%;
+  height: 200px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+
+  background-size: cover;
+  background-position: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* ================= CARD ================= */
+
+.slot-booking-card {
+  margin-top: 30px;
+
+  padding: 32px;
+
+  border-radius: 24px;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+
+  box-shadow:
+    0 15px 35px rgba(0,0,0,0.06);
+
+  animation: fadeUp 0.4s ease;
+}
+
+/* ================= SECTION ================= */
+
+.slot-section {
+  margin-bottom: 30px;
+}
+
+.slot-header h3 {
+  font-size: 22px;
+
+  font-weight: 700;
+
+  color: #111827;
+
+  margin-bottom: 6px;
+}
+
+.slot-header p {
+  color: #6b7280;
+
+  font-size: 14px;
+
+  margin-bottom: 18px;
+}
+
+/* ================= DATE INPUT ================= */
+
+.date-input {
+  width: 100%;
+
+  padding: 15px 18px;
+
+  border-radius: 16px;
+
+  border: 1px solid #d1d5db;
+
+  background: #f9fafb;
+
+  font-size: 15px;
+
+  transition: 0.3s ease;
+}
+
+.date-input:focus {
+  outline: none;
+
+  border-color: #2563eb;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 0 0 4px rgba(37,99,235,0.12);
+}
+
+/* ================= SLOT GRID ================= */
+
+.slot-container {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 16px;
+}
+
+/* ================= SLOT BUTTON ================= */
+
+.slot-btn {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 14px 20px;
+
+  border-radius: 16px;
+
+  border: 1px solid #dbeafe;
+
+  background: #eff6ff;
+
+  color: #1d4ed8;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+.slot-btn:hover {
+  transform: translateY(-3px);
+
+  background: #dbeafe;
+
+  box-shadow:
+    0 10px 22px rgba(37,99,235,0.12);
+}
+
+/* ================= SELECTED ================= */
+
+.slot-selected {
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #4f46e5
+    );
+
+  color: white;
+
+  border: none;
+
+  box-shadow:
+    0 14px 28px rgba(37,99,235,0.22);
+}
+
+/* ================= ICON ================= */
+
+.slot-icon {
+  font-size: 16px;
+}
+
+/* ================= SELECTED BOX ================= */
+
+.selected-slot-box {
+  margin-top: 24px;
+
+  padding: 20px 24px;
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #eff6ff,
+      #eef2ff
+    );
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+}
+
+.selected-slot-box h4 {
+  font-size: 16px;
+
+  color: #111827;
+
+  margin-bottom: 4px;
+}
+
+.selected-slot-box p {
+  font-size: 14px;
+
+  color: #6b7280;
+}
+
+/* COUNT */
+
+.selected-count {
+  width: 50px;
+  height: 50px;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #4f46e5
+    );
+
+  color: white;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 18px;
+
+  font-weight: 700;
+
+  box-shadow:
+    0 10px 20px rgba(37,99,235,0.22);
+}
+
+/* ================= BUTTON ================= */
+
+.confirm-btn {
+  margin-top: 10px;
+}
+
+/* ================= ANIMATION ================= */
+
+@keyframes fadeUp {
+
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* DISABLED SLOT */
+
+.slot-disabled {
+
+  opacity: 0.45;
+
+  cursor: not-allowed;
+
+  background: rgba(255,255,255,0.2);
+
+  border: 1px dashed #9ca3af;
+
+  color: #6b7280;
+
+  pointer-events: none;
+
+  filter: grayscale(20%);
+}

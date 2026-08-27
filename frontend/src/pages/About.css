@@ -1,0 +1,126 @@
+.about-page {
+  padding: 25px;
+  background: #f9fafb;
+  min-height: 100vh;
+}
+
+/* HERO */
+.about-hero {
+  background: linear-gradient(135deg, #4f7cff, #3b82f6);
+  color: white;
+  padding: 30px;
+  border-radius: 16px;
+  margin-bottom: 30px;
+}
+
+.about-hero h1 {
+  font-size: 26px;
+  margin-bottom: 8px;
+}
+
+.about-user {
+  display: block;
+  margin-top: 10px;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* SECTION */
+.about-section {
+  margin-bottom: 30px;
+}
+
+.about-section h2 {
+  margin-bottom: 15px;
+  color: #111827;
+}
+
+/* GRID */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+/* CARD */
+.card {
+  background: #fff;
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+  transition: 0.25s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* ICON */
+.icon {
+  color: #4f7cff;
+  margin-bottom: 10px;
+}
+
+/* TEXT */
+.card h3 {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.card p {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* ---------- CONTACT SECTION ---------- */
+
+.about-contact {
+  margin-top: 40px;
+}
+
+/* CARD */
+
+.contact-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+  max-width: 400px;
+}
+
+/* ROW */
+
+.contact-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #374151;
+}
+
+/* ICON */
+
+.contact-icon {
+  color: #4f7cff;
+}
+
+/* PHONE */
+
+.contact-phone {
+  text-decoration: none;
+  color: #4f7cff;
+  font-weight: 500;
+}
+
+.contact-phone:hover {
+  text-decoration: underline;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .about-hero h1 {
+    font-size: 20px;
+  }
+}
