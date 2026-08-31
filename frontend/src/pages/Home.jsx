@@ -93,7 +93,7 @@ export default function Home() {
           <h3>Hall Booking</h3>
 
           <p>
-            Easily Reserve Saraswathi and Studio Halls
+            Easily Reserve Seminar and Studio Halls
             with Modern slot Management.
           </p>
         </div>

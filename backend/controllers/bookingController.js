@@ -2,7 +2,10 @@ const Booking = require("../models/Booking");
 const sendEmail = require("../utils/sendEmail");
 const sendSMS = require("../utils/sendSMS");
 
-/* ---------- CREATE BOOKING ---------- */
+
+/* =========================================================
+   CREATE BOOKING
+========================================================= */
 
 exports.createBooking = async (req, res) => {
   try {
@@ -22,47 +25,95 @@ exports.createBooking = async (req, res) => {
       slots
     } = req.body;
 
-    if (!hall || !name || !designation || !email || !phone || !date || !slots) {
-      return res.status(400).json({ message: "Missing required fields" });
+
+    /* ---------- VALIDATION ---------- */
+
+    if (
+      !hall ||
+      !name ||
+      !designation ||
+      !email ||
+      !phone ||
+      !date ||
+      !slots
+    ) {
+      return res.status(400).json({
+        message: "Missing required fields"
+      });
     }
 
     if (!equipment) {
-      return res.status(400).json({ message: "Equipment is required" });
+      return res.status(400).json({
+        message: "Equipment is required"
+      });
     }
 
-    if (equipment === "Other" && !otherEquipment?.trim()) {
-      return res.status(400).json({ message: "Please specify other equipment" });
+    if (
+      equipment === "Other" &&
+      !otherEquipment?.trim()
+    ) {
+      return res.status(400).json({
+        message: "Please specify other equipment"
+      });
     }
 
-    const normalizedSlots = Array.isArray(slots) ? slots : [slots];
 
-    const isFullDay = normalizedSlots.some(s => s.includes("Full Day"));
+    /* ---------- NORMALIZE SLOTS ---------- */
+
+    const normalizedSlots = Array.isArray(slots)
+      ? slots
+      : [slots];
+
+    const isFullDay = normalizedSlots.some(
+      (s) => s.includes("Full Day")
+    );
+
+
+    /* ---------- CHECK EXISTING BOOKING ---------- */
 
     let exists;
 
     if (isFullDay) {
+
       exists = await Booking.findOne({
         hall,
         date,
         status: "approved"
       });
+
     } else {
+
       exists = await Booking.findOne({
         hall,
         date,
         status: "approved",
         $or: [
-          { slots: { $in: normalizedSlots } },
-          { slots: { $in: ["Full Day"] } }
+          {
+            slots: {
+              $in: normalizedSlots
+            }
+          },
+          {
+            slots: {
+              $in: ["Full Day"]
+            }
+          }
         ]
       });
+
     }
+
+
+    /* ---------- SLOT ALREADY BOOKED ---------- */
 
     if (exists) {
       return res.status(400).json({
         message: "Selected slot already booked"
       });
     }
+
+
+    /* ---------- CREATE BOOKING ---------- */
 
     const booking = await Booking.create({
       hall,
@@ -81,157 +132,387 @@ exports.createBooking = async (req, res) => {
       status: "pending"
     });
 
-    await sendSMS(
-  "8925319130",
-  "Test SMS from Hall Booking App"
-);
 
-    /* SMS */
-    try {
-      await sendSMS(phone, `Booking submitted for ${hall} on ${date}`);
-    } catch (e) {
-      console.log("SMS error:", e.message);
-    }
+    console.log(
+      "Booking created:",
+      booking._id
+    );
 
-    /* EMAIL */
+
+    /* =====================================================
+       SMS - USER
+    ===================================================== */
+
     try {
-      await sendEmail(
-        "itzmeyogesh2k4@gmail.com",
-        "New Booking Request",
-        `Booking for ${hall} on ${date}\nSlots: ${normalizedSlots.join(", ")}`
+
+      await sendSMS(
+        phone,
+        `Booking submitted for ${hall} on ${date}. Slots: ${normalizedSlots.join(", ")}`
       );
+
+      console.log(
+        "Booking SMS sent to:",
+        phone
+      );
+
     } catch (e) {
-      console.log("Admin email failed:", e.message);
+
+      console.error(
+        "Booking SMS failed:",
+        e.message
+      );
+
     }
 
-    if (email) {
-      try {
-        await sendEmail(
-          email,
-          "Booking Submitted",
-          `Your booking slots: ${normalizedSlots.join(", ")}`
-        );
-      } catch (e) {
-        console.log("User email failed:", e.message);
-      }
+
+    /* =====================================================
+       EMAIL - ADMIN
+    ===================================================== */
+
+    try {
+
+      await sendEmail(
+        process.env.EMAIL_USER,
+        "New Booking Request",
+        `New booking request
+
+Hall: ${hall}
+Name: ${name}
+Email: ${email}
+Phone: ${phone}
+College: ${college || "Not provided"}
+Department: ${department || "Not provided"}
+Year: ${year || "Not provided"}
+Purpose: ${purpose || "Not provided"}
+Equipment: ${equipment}
+Other Equipment: ${otherEquipment || "N/A"}
+Date: ${date}
+Slots: ${normalizedSlots.join(", ")}
+
+Status: Pending
+`
+      );
+
+      console.log(
+        "Admin email sent to:",
+        process.env.EMAIL_USER
+      );
+
+    } catch (e) {
+
+      console.error(
+        "Admin email failed:",
+        e
+      );
+
     }
 
-    // ✅ SINGLE RESPONSE
-    res.json(booking);
+
+    /* =====================================================
+       EMAIL - USER
+    ===================================================== */
+
+    try {
+
+      await sendEmail(
+        email,
+        "Booking Submitted",
+        `Dear ${name},
+
+Your hall booking request has been submitted successfully.
+
+Booking Details
+----------------
+
+Hall: ${hall}
+Date: ${date}
+Slots: ${normalizedSlots.join(", ")}
+
+Status: Pending
+
+Your booking is currently waiting for approval.
+
+You will receive another notification when the booking status is updated.
+
+Thank you.
+
+Hall Booking`
+      );
+
+      console.log(
+        "User email sent to:",
+        email
+      );
+
+    } catch (e) {
+
+      console.error(
+        "User email failed:",
+        e
+      );
+
+    }
+
+
+    /* ---------- RESPONSE ---------- */
+
+    return res.json(booking);
 
   } catch (err) {
-    console.error("Create booking error:", err);
-    res.status(500).json(err);
+
+    console.error(
+      "Create booking error:",
+      err
+    );
+
+    return res.status(500).json({
+      message: err.message
+    });
+
   }
 };
 
 
-
-/* ---------- GET BOOKINGS ---------- */
+/* =========================================================
+   GET BOOKINGS
+========================================================= */
 
 exports.getBookings = async (req, res) => {
+
   try {
-    const bookings = await Booking.find().sort({ createdAt: -1 });
+
+    const bookings = await Booking
+      .find()
+      .sort({
+        createdAt: -1
+      });
+
     res.json(bookings);
+
   } catch (err) {
-    res.status(500).json(err);
+
+    console.error(
+      "Get bookings error:",
+      err
+    );
+
+    res.status(500).json({
+      message: err.message
+    });
+
   }
+
 };
 
 
-/* ---------- UPDATE STATUS ---------- */
+/* =========================================================
+   UPDATE BOOKING STATUS
+========================================================= */
 
 exports.updateBookingStatus = async (req, res) => {
+
   try {
+
     const { id } = req.params;
     const { status } = req.body;
+
+
+    /* ---------- FIND BOOKING ---------- */
 
     const booking = await Booking.findById(id);
 
     if (!booking) {
-      return res.status(404).json({ message: "Booking not found" });
+
+      return res.status(404).json({
+        message: "Booking not found"
+      });
+
     }
 
+
+    /* =====================================================
+       CHECK SLOT CONFLICT WHEN APPROVING
+    ===================================================== */
+
     if (status === "approved") {
-      const isFullDay = booking.slots.some(s => s.includes("Full Day"));
+
+      const isFullDay = booking.slots.some(
+        (s) => s.includes("Full Day")
+      );
 
       let conflict;
 
+
       if (isFullDay) {
+
         conflict = await Booking.findOne({
-          _id: { $ne: booking._id },
+          _id: {
+            $ne: booking._id
+          },
           hall: booking.hall,
           date: booking.date,
           status: "approved"
         });
+
       } else {
+
         conflict = await Booking.findOne({
-          _id: { $ne: booking._id },
+          _id: {
+            $ne: booking._id
+          },
           hall: booking.hall,
           date: booking.date,
           status: "approved",
           $or: [
-            { slots: { $in: booking.slots } },
-            { slots: { $in: ["Full Day"] } }
+            {
+              slots: {
+                $in: booking.slots
+              }
+            },
+            {
+              slots: {
+                $in: ["Full Day"]
+              }
+            }
           ]
         });
+
       }
 
+
+      /* ---------- CONFLICT ---------- */
+
       if (conflict) {
+
         return res.status(400).json({
           message: "Slot already approved"
         });
+
       }
+
     }
+
+
+    /* ---------- UPDATE STATUS ---------- */
 
     booking.status = status;
+
     await booking.save();
 
-    /* SMS */
 
-try {
+    console.log(
+      `Booking ${booking._id} status changed to ${status}`
+    );
 
-  const smsMessage =
-    `Booking submitted for ${hall} on ${date}. ` +
-    `Slots: ${normalizedSlots.join(", ")}`;
 
-  await sendSMS(phone, smsMessage);
+    /* =====================================================
+       SMS - STATUS UPDATE
+    ===================================================== */
 
-  console.log("Booking SMS sent");
+    if (booking.phone) {
 
-} catch (e) {
-
-  console.log("SMS error:", e.message);
-
-}
-
-    /* EMAIL */
-    if (booking.email) {
       try {
-        await sendEmail(
-          booking.email,
-          "Booking Status Update",
-          `Your booking for ${booking.hall} on ${booking.date} is ${status}`
+
+        const smsMessage =
+          `Your booking for ${booking.hall} on ${booking.date} is ${status}. ` +
+          `Slots: ${booking.slots.join(", ")}`;
+
+        await sendSMS(
+          booking.phone,
+          smsMessage
         );
+
+        console.log(
+          "Status SMS sent to:",
+          booking.phone
+        );
+
       } catch (e) {
-        console.log("Status email failed:", e.message);
+
+        console.error(
+          "Status SMS failed:",
+          e.message
+        );
+
       }
+
     }
 
-    // ✅ SINGLE RESPONSE
-    res.json(booking);
+
+    /* =====================================================
+       EMAIL - STATUS UPDATE
+    ===================================================== */
+
+    if (booking.email) {
+
+      try {
+
+        await sendEmail(
+          booking.email,
+          `Booking ${status}`,
+          `Dear ${booking.name},
+
+Your hall booking status has been updated.
+
+Booking Details
+----------------
+
+Hall: ${booking.hall}
+Date: ${booking.date}
+Slots: ${booking.slots.join(", ")}
+
+Status: ${status}
+
+Thank you.
+
+Hall Booking`
+        );
+
+        console.log(
+          "Status email sent to:",
+          booking.email
+        );
+
+      } catch (e) {
+
+        console.error(
+          "Status email failed:",
+          e
+        );
+
+      }
+
+    }
+
+
+    /* ---------- RESPONSE ---------- */
+
+    return res.json(booking);
 
   } catch (err) {
-    console.error("Update booking error:", err);
-    res.status(500).json(err);
+
+    console.error(
+      "Update booking error:",
+      err
+    );
+
+    return res.status(500).json({
+      message: err.message
+    });
+
   }
+
 };
 
 
-/* ---------- TECHNICIAN REPORT ---------- */
+/* =========================================================
+   UPDATE TECHNICIAN REPORT
+========================================================= */
 
 exports.updateTechnicianReport = async (req, res) => {
+
   try {
+
     const {
       keyReturned,
       damageFound,
@@ -241,6 +522,9 @@ exports.updateTechnicianReport = async (req, res) => {
       other
     } = req.body;
 
+
+    /* ---------- VALIDATION ---------- */
+
     if (
       !keyReturned ||
       !damageFound ||
@@ -248,49 +532,90 @@ exports.updateTechnicianReport = async (req, res) => {
       !chairsArranged ||
       !itemsReturned
     ) {
+
       return res.status(400).json({
         message: "All report fields are required"
       });
+
     }
 
-    const booking = await Booking.findByIdAndUpdate(
-      req.params.id,
-      {
-        technicianReport: {
-          keyReturned,
-          damageFound,
-          bannerRemoved,
-          chairsArranged,
-          itemsReturned,
-          other
+
+    /* ---------- UPDATE REPORT ---------- */
+
+    const booking =
+      await Booking.findByIdAndUpdate(
+        req.params.id,
+        {
+          technicianReport: {
+            keyReturned,
+            damageFound,
+            bannerRemoved,
+            chairsArranged,
+            itemsReturned,
+            other
+          }
+        },
+        {
+          new: true
         }
-      },
-      { new: true }
-    );
+      );
+
+
+    if (!booking) {
+
+      return res.status(404).json({
+        message: "Booking not found"
+      });
+
+    }
+
 
     res.json(booking);
 
   } catch (err) {
-    console.error("Report update error:", err);
-    res.status(500).json(err);
+
+    console.error(
+      "Report update error:",
+      err
+    );
+
+    res.status(500).json({
+      message: err.message
+    });
+
   }
+
 };
 
 
-/* ---------- MARK COMPLETED ---------- */
+/* =========================================================
+   MARK COMPLETED
+========================================================= */
 
 exports.markCompleted = async (req, res) => {
+
   try {
 
-    const booking = await Booking.findById(req.params.id);
+    const booking =
+      await Booking.findById(req.params.id);
+
+
+    /* ---------- BOOKING NOT FOUND ---------- */
 
     if (!booking) {
+
       return res.status(404).json({
         message: "Booking not found"
       });
+
     }
 
-    const report = booking.technicianReport || {};
+
+    /* ---------- TECHNICIAN REPORT ---------- */
+
+    const report =
+      booking.technicianReport || {};
+
 
     if (
       !report.keyReturned ||
@@ -299,13 +624,17 @@ exports.markCompleted = async (req, res) => {
       !report.chairsArranged ||
       !report.itemsReturned
     ) {
+
       return res.status(400).json({
         message:
           "Complete technician report before marking as completed"
       });
+
     }
 
-    // ✅ FIX MISSING OLD DATA
+
+    /* ---------- FIX MISSING OLD DATA ---------- */
+
     if (!booking.designation) {
       booking.designation = "Others";
     }
@@ -314,43 +643,130 @@ exports.markCompleted = async (req, res) => {
       booking.equipment = "All of the above";
     }
 
+
+    /* ---------- MARK COMPLETED ---------- */
+
     booking.status = "completed";
 
     await booking.save();
 
-    try {
-      await sendSMS(
-        booking.phone,
-        `Your booking for ${booking.hall} is completed`
-      );
-    } catch (e) {
-      console.log("SMS error:", e.message);
+
+    /* =====================================================
+       SMS - COMPLETED
+    ===================================================== */
+
+    if (booking.phone) {
+
+      try {
+
+        await sendSMS(
+          booking.phone,
+          `Your booking for ${booking.hall} is completed.`
+        );
+
+        console.log(
+          "Completion SMS sent to:",
+          booking.phone
+        );
+
+      } catch (e) {
+
+        console.error(
+          "Completion SMS failed:",
+          e.message
+        );
+
+      }
+
     }
+
+
+    /* =====================================================
+       EMAIL - COMPLETED
+    ===================================================== */
+
+    if (booking.email) {
+
+      try {
+
+        await sendEmail(
+          booking.email,
+          "Booking Completed",
+          `Dear ${booking.name},
+
+Your hall booking has been completed.
+
+Hall: ${booking.hall}
+Date: ${booking.date}
+Slots: ${booking.slots.join(", ")}
+
+Status: Completed
+
+Thank you.
+
+Hall Booking`
+        );
+
+        console.log(
+          "Completion email sent to:",
+          booking.email
+        );
+
+      } catch (e) {
+
+        console.error(
+          "Completion email failed:",
+          e
+        );
+
+      }
+
+    }
+
+
+    /* ---------- RESPONSE ---------- */
 
     res.json(booking);
 
   } catch (err) {
 
-    console.error("Mark completed error:", err);
+    console.error(
+      "Mark completed error:",
+      err
+    );
 
     res.status(500).json({
       message: err.message
     });
+
   }
+
 };
 
-  exports.editBooking = async (req, res) => {
+
+/* =========================================================
+   EDIT BOOKING
+========================================================= */
+
+exports.editBooking = async (req, res) => {
+
   try {
 
-    const existingBooking = await Booking.findById(req.params.id);
+    const existingBooking =
+      await Booking.findById(req.params.id);
+
 
     if (!existingBooking) {
+
       return res.status(404).json({
         message: "Booking not found"
       });
+
     }
 
+
     const updatedData = {
+
       ...existingBooking.toObject(),
 
       ...req.body,
@@ -362,44 +778,159 @@ exports.markCompleted = async (req, res) => {
       equipment:
         req.body.equipment ||
         existingBooking.equipment
+
     };
 
-    const booking = await Booking.findByIdAndUpdate(
-      req.params.id,
-      updatedData,
-      {
-        new: true,
-        runValidators: true
-      }
-    );
+
+    const booking =
+      await Booking.findByIdAndUpdate(
+        req.params.id,
+        updatedData,
+        {
+          new: true,
+          runValidators: true
+        }
+      );
+
 
     res.json(booking);
 
   } catch (err) {
 
-    console.error("Edit booking error:", err);
+    console.error(
+      "Edit booking error:",
+      err
+    );
 
     res.status(500).json({
       message: err.message
     });
+
   }
+
 };
 
+
+/* =========================================================
+   CANCEL BOOKING
+========================================================= */
+
 exports.cancelBooking = async (req, res) => {
+
   try {
-    const booking = await Booking.findByIdAndUpdate(
-      req.params.id,
-      { status: "cancelled" },
-      { new: true }
-    );
+
+    const booking =
+      await Booking.findByIdAndUpdate(
+        req.params.id,
+        {
+          status: "cancelled"
+        },
+        {
+          new: true
+        }
+      );
+
 
     if (!booking) {
-      return res.status(404).json({ message: "Booking not found" });
+
+      return res.status(404).json({
+        message: "Booking not found"
+      });
+
     }
 
-    res.json({ message: "Booking cancelled", booking });
+
+    /* =====================================================
+       SMS - CANCELLED
+    ===================================================== */
+
+    if (booking.phone) {
+
+      try {
+
+        await sendSMS(
+          booking.phone,
+          `Your booking for ${booking.hall} on ${booking.date} has been cancelled.`
+        );
+
+        console.log(
+          "Cancellation SMS sent to:",
+          booking.phone
+        );
+
+      } catch (e) {
+
+        console.error(
+          "Cancellation SMS failed:",
+          e.message
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       EMAIL - CANCELLED
+    ===================================================== */
+
+    if (booking.email) {
+
+      try {
+
+        await sendEmail(
+          booking.email,
+          "Booking Cancelled",
+          `Dear ${booking.name},
+
+Your hall booking has been cancelled.
+
+Hall: ${booking.hall}
+Date: ${booking.date}
+Slots: ${booking.slots.join(", ")}
+
+Status: Cancelled
+
+Thank you.
+
+Hall Booking`
+        );
+
+        console.log(
+          "Cancellation email sent to:",
+          booking.email
+        );
+
+      } catch (e) {
+
+        console.error(
+          "Cancellation email failed:",
+          e
+        );
+
+      }
+
+    }
+
+
+    /* ---------- RESPONSE ---------- */
+
+    res.json({
+      message: "Booking cancelled",
+      booking
+    });
+
   } catch (err) {
-    console.error("Cancel booking error:", err);
-    res.status(500).json(err);
+
+    console.error(
+      "Cancel booking error:",
+      err
+    );
+
+    res.status(500).json({
+      message: err.message
+    });
+
   }
+
 };

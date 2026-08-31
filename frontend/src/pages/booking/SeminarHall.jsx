@@ -111,7 +111,7 @@ export default function SeminarHall() {
       const booked = data
         .filter(
           (b) =>
-            b.hall === "Saraswathi Hall" &&   // ✅ correct hall
+            b.hall === " Seminar Hall " &&   // ✅ correct hall
             b.date === date &&
             b.status === "approved"
         )
@@ -259,7 +259,7 @@ if (equipment === "Other" && !otherEquipment.trim()) {
          
         <div className="booking-banner">
           
-  <button className="primary-btn"><h1>Saraswathi Hall Booking</h1></button>
+  <button className="primary-btn"><h1>Seminar Hall Booking</h1></button>
 </div>
 
         <div className="form-group">

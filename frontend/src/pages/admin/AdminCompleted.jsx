@@ -134,7 +134,7 @@ export default function AdminCompleted() {
           </p>
 
           <h2>
-            SARASWATI HALL – REQUISITION FORM
+            SEMINAR HALL – REQUISITION FORM
           </h2>
         </div>
 
@@ -250,7 +250,7 @@ export default function AdminCompleted() {
 
         <div className="signature-box">
           <div className="signature-space"></div>
-          <h4>SARASWATI HALL INCHARGE</h4>
+          <h4>SEMINAR HALL INCHARGE</h4>
           <p>📞 78454 68472</p>
         </div>
 

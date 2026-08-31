@@ -21,14 +21,14 @@ export default function About() {
       <div className="about-hero">
         <h1>About Hall Booking System</h1>
         <p>
-          A Modern Platform to Manage Saraswathi and Studio Hall Bookings Efficiently.
+          A Modern Platform to Manage Seminar and Studio Hall Bookings Efficiently.
         </p>
         <span className="about-user">Welcome, {user?.email}</span>
       </div>
 
-      {/* SEMINAR HALL */}
+      {/* Seminar Hall */}
       <section className="about-section">
-        <h2>Saraswathi Hall</h2>
+        <h2>Seminar Hall</h2>
 
         <div className="card-grid">
           <div className="card">

@@ -23,7 +23,6 @@ dist/
 
 # Misc
 .DS_Store
-Thumbs.db
 
 # Logs
 npm-debug.log*

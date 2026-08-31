@@ -21,7 +21,7 @@ export default function Bookings() {
         >
           <img src={seminarImg} alt="Seminar Hall" />
           <div className="card-content">
-            <h3>Saraswathi Hall</h3>
+            <h3>Seminar Hall</h3>
             <p>Capacity: 300 People</p>
           </div>
         </div>

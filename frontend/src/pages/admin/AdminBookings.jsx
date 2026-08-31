@@ -344,14 +344,14 @@ const deleteBooking = async (id) => {
   }
   onMouseLeave={(e) =>
     (e.target.style.background = "#10b981")
-  } onClick={() => approveBooking(b)} style={styles.approve}>Approve</button>
+  } onClick={() => approveBooking(b)} >Approve</button>
               <button  style={styles.reject}
   onMouseEnter={(e) =>
     (e.target.style.background = "#dc2626")
   }
   onMouseLeave={(e) =>
     (e.target.style.background = "#ef4444")
-  }  onClick={() => rejectBooking(b._id)} style={styles.reject}>Reject</button>
+  }  onClick={() => rejectBooking(b._id)} >Reject</button>
             </>
           )}
 
@@ -423,14 +423,14 @@ const deleteBooking = async (id) => {
 
               <button style={styles.primaryBtn}
                 onClick={() => markCompleted(activeBooking._id)}
-                style={{ background: "green", marginLeft: "90px" }}
+                styles={{ background: "green", marginLeft: "90px" }}
               >
                 Complete
               </button>
 
               <button style={styles.secondaryBtn}
                 onClick={() => setActiveBooking(null)}
-                style={{ marginLeft: "90px" }}
+                styles={{ marginLeft: "90px" }}
               >
                 Close
               </button>
