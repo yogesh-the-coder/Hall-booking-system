@@ -23,7 +23,7 @@ import { ToastContainer } from "react-toastify";
 import About from "./pages/About";
 import "react-toastify/dist/ReactToastify.css";
 
-import '@fortawesome/fontawesome-free/css/all.min.css';
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 export default function App() {
   return (
@@ -32,7 +32,7 @@ export default function App() {
         <Routes>
 
           {/* ---------- AUTH ROUTES ---------- */}
-          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
 
@@ -41,7 +41,7 @@ export default function App() {
           <Route
             path="/home"
             element={
-              <ProtectedRoute allowedRoles={["user"]}> 
+              <ProtectedRoute allowedRoles={["user"]}>
                 <UserLayout />
               </ProtectedRoute>
             }
@@ -55,6 +55,7 @@ export default function App() {
             <Route path="about" element={<About />} />
           </Route>
 
+
           {/* ---------- ADMIN ROUTES ---------- */}
           <Route
             path="/admin"
@@ -63,7 +64,6 @@ export default function App() {
                 <AdminLayout />
               </ProtectedRoute>
             }
-            
           >
             <Route index element={<AdminHome />} />
             <Route path="bookings" element={<AdminBookings />} />
