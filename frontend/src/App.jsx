@@ -67,7 +67,7 @@ export default function App() {
           >
             <Route index element={<AdminHome />} />
             <Route path="bookings" element={<AdminBookings />} />
-            <Route path="/admin/completed" element={<AdminCompleted />} />
+            <Route path="completed" element={<AdminCompleted />} />
           </Route>
 
 
