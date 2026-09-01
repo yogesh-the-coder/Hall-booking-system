@@ -68,35 +68,6 @@ export default function SeminarHall() {
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [bookedSlots, setBookedSlots] = useState([]);
 
-  const getAvailableSlots = () => {
-  // If already selected Full Day → show only Full Day
-  if (selectedSlots.includes("Full Day")) return ["Full Day"];
-
-  // If Full Day already booked → nothing available
-  if (bookedSlots.includes("Full Day")) return [];
-
-  const hasForenoonBooked = bookedSlots.includes("Forenoon");
-  const hasAfternoonBooked = bookedSlots.includes("Afternoon");
-
-  // If both booked → nothing
-  if (hasForenoonBooked && hasAfternoonBooked) return [];
-
-  // If Morning booked → only Afternoon
-  if (hasForenoonBooked) return ["Afternoon"];
-
-  // If Afternoon booked → only Morning
-  if (hasAfternoonBooked) return ["Forenoon"];
-
-  // If user already selected Morning → hide Full Day
-  if (selectedSlots.includes("Forenoon")) return ["Forenoon", "Afternoon"];
-
-  // If user already selected Afternoon → hide Full Day
-  if (selectedSlots.includes("Afternoon")) return ["Forenoon", "Afternoon"];
-
-  // Default
-  return allSlots;
-};
-
   /* ---------- FETCH BOOKED SLOTS ---------- */
 
   useEffect(() => {
@@ -630,10 +601,3 @@ if (equipment === "Other" && !otherEquipment.trim()) {
   </div>
 )
 }
-const styles = {
-  error: {
-    color: "red",
-    fontSize: "12px",
-    marginBottom: "8px"
-  }
-};

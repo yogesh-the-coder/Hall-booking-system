@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../../auth/AuthContext";
 import { toast } from "react-toastify";
 import "./MyBookings.css";
+
+const API = process.env.REACT_APP_API_URL;
 
 export default function MyBookings() {
   const { user } = useAuth();
@@ -16,11 +18,13 @@ export default function MyBookings() {
   const [editModal, setEditModal] = useState(false);
   const [editData, setEditData] = useState(null);
 
-  const slotOptions = ["Forenoon", "Afternoon", "Full Day"];
-
   /* ---------------- LOAD BOOKINGS ---------------- */
-  const loadBookings = async () => {
-    const res = await fetch("http://localhost:5000/api/bookings");
+  const loadBookings = useCallback(async () => {
+  if (!user?.email) return;
+
+  try {
+    const res = await fetch(`${API}/bookings`);
+
     const data = await res.json();
 
     const userBookings = data.filter(
@@ -30,11 +34,15 @@ export default function MyBookings() {
     );
 
     setBookings(userBookings);
-  };
+  } catch (error) {
+    console.error("Failed to load bookings:", error);
+    toast.error("Failed to load bookings");
+  }
+}, [user?.email]);
 
   useEffect(() => {
-    loadBookings();
-  }, []);
+  loadBookings();
+}, [loadBookings]);
 
   /* ---------------- CANCEL ---------------- */
   const cancelBooking = async (id) => {

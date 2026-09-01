@@ -6,10 +6,6 @@ import {
   Info,
   Building2,
   ClipboardCheck,
-  UserCircle2,
-  LayoutDashboard,
-  LogOut,
-  Trash2
 } from "lucide-react";
 
 export default function AdminBookings() {
