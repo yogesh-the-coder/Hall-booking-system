@@ -7,7 +7,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const API = "http://localhost:5000/api/auth";
+  const API = process.env.REACT_APP_API_URL;
 
   /* ---------- LOAD SESSION ---------- */
 

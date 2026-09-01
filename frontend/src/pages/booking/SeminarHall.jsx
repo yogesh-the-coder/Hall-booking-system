@@ -4,6 +4,8 @@ import "./SeminarHall.css";
 import seminarImg from "../../assets/seminar.jpeg";
 import { toast } from "react-toastify";
 
+const API = process.env.REACT_APP_API_URL;
+
 
 /* ---------- TIME SLOTS ---------- */
 
@@ -76,7 +78,7 @@ export default function SeminarHall() {
 
     const fetchBookings = async () => {
 
-      const res = await fetch("http://localhost:5000/api/bookings");
+      const res = await fetch(`${API}/bookings`);
       const data = await res.json();
 
       const booked = data
@@ -171,7 +173,7 @@ if (equipment === "Other" && !otherEquipment.trim()) {
 
     try {
 
-      const res = await fetch("http://localhost:5000/api/bookings", {
+      const res = await fetch(`${API}/bookings`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

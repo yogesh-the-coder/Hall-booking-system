@@ -59,7 +59,7 @@ export default function MyBookings() {
               closeToast();
 
               const res = await fetch(
-                `http://localhost:5000/api/bookings/${id}/cancel`,
+                `${API}/bookings/${id}/cancel`,
                 {
                   method: "PUT"
                 }
@@ -131,7 +131,7 @@ export default function MyBookings() {
     }
 
     const res = await fetch(
-      `http://localhost:5000/api/bookings/${editData._id}/edit`,
+      `${API}/bookings/${editData._id}/edit`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },

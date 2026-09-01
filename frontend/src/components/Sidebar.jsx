@@ -7,6 +7,9 @@ import {
   Info,
   Building2,
   ClipboardCheck,
+  UserCircle2,
+  LayoutDashboard,
+  LogOut
 } from "lucide-react";
 
 import "./Sidebar.css";

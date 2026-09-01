@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 import {
-  Home,
-  Info,
-  Building2,
-  ClipboardCheck,
+  Trash2
 } from "lucide-react";
+
+const API = process.env.REACT_APP_API_URL;
 
 export default function AdminBookings() {
   const [tab, setTab] = useState("pending");
@@ -94,8 +93,7 @@ const deleteBooking = async (id) => {
 
               try {
 
-                const res = await fetch(
-                  `http://localhost:5000/api/bookings/${id}`,
+                const res = await fetch(`${API}/bookings/${id}`,
                   {
                     method: "DELETE"
                   }
@@ -156,7 +154,7 @@ const deleteBooking = async (id) => {
 };
 
   const loadBookings = async () => {
-    const res = await fetch("http://localhost:5000/api/bookings");
+    const res = await fetch(`${API}/bookings`);
     const data = await res.json();
     setBookings(data);
 
@@ -174,7 +172,7 @@ const deleteBooking = async (id) => {
   }, []);
 
   const approveBooking = async (booking) => {
-    await fetch(`http://localhost:5000/api/bookings/${booking._id}`, {
+    await fetch(`${API}/bookings/${booking._id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: "approved" })
@@ -183,7 +181,7 @@ const deleteBooking = async (id) => {
   };
 
   const rejectBooking = async (id) => {
-    await fetch(`http://localhost:5000/api/bookings/${id}`, {
+    await fetch(`${API}/bookings/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: "rejected" })
@@ -192,7 +190,7 @@ const deleteBooking = async (id) => {
   };
 
   const saveReport = async (id) => {
-    const res = await fetch(`http://localhost:5000/api/bookings/${id}/report`, {
+    const res = await fetch(`${API}/bookings/${id}/report`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(reports[id])
@@ -214,7 +212,7 @@ const deleteBooking = async (id) => {
       return;
     }
 
-    const res = await fetch(`http://localhost:5000/api/bookings/${id}/complete`, {
+    const res = await fetch(`${API}/bookings/${id}/complete`, {
       method: "PUT"
     });
 

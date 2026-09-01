@@ -4,6 +4,8 @@ import uitLogo from "../../assets/UIT.jpeg";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
+const API = process.env.REACT_APP_API_URL;
+
 export default function AdminCompleted() {
   const [bookings, setBookings] = useState([]);
 
@@ -47,7 +49,7 @@ export default function AdminCompleted() {
   });
 
   const loadBookings = async () => {
-    const res = await fetch("http://localhost:5000/api/bookings");
+    const res = await fetch(`${API}/bookings`);
     const data = await res.json();
     setBookings(data.filter((b) => b.status === "completed"));
   };
