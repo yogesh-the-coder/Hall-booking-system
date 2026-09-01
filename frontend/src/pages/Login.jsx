@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { useNavigate, Link, Navigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate, Link, } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import './AuthAnimation.css';
 import uitLogo from "../assets/UIT.jpeg";
 
 export default function Login() {
-  const { login, user } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
@@ -109,70 +109,4 @@ export default function Login() {
 );
 }
 
-const styles = {
-  page: {
-    minHeight: '100vh',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    background: 'linear-gradient(135deg, #4f7cff 50%, #ffffff 50%)'
-  },
 
-  form: {
-    width: '100%',
-    maxWidth: '520px',        // ✅ BIG CARD
-    padding: '40px',          // ✅ PROPER PADDING
-    background: '#ffffff',
-    borderRadius: '14px',
-    boxShadow: '0 16px 40px rgba(0,0,0,0.2)'
-  },
-
-  input: {
-    width: '100%',
-    padding: '14px',
-    marginBottom: '18px',
-    fontSize: '16px',
-    borderRadius: '8px',
-    border: '1px solid #ccc'
-  },
-
-  passwordWrapper: {
-    position: 'relative',
-    width: '100%'
-  },
-
-  passwordInput: {
-    width: '100%',
-    padding: '14px 48px 14px 14px',
-    marginBottom: '18px',
-    fontSize: '16px',
-    borderRadius: '8px',
-    border: '1px solid #ccc'
-  },
-
-  eyeIcon: {
-    position: 'absolute',
-    right: '12px',
-    top: '50%',
-    transform: 'translateY(-50%)',
-    cursor: 'pointer',
-    fontSize: '18px'
-  },
-
-  button: {
-    width: '100%',
-    padding: '14px',
-    fontSize: '17px',
-    backgroundColor: '#4f7cff',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '8px',
-    cursor: 'pointer'
-  },
-
-  error: {
-    color: 'red',
-    fontSize: '13px',
-    marginBottom: '12px'
-  }
-};
